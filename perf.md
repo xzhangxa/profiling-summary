@@ -1,12 +1,4 @@
-# General-purpose Tools
-
-A list from Wikipedia: https://en.wikipedia.org/wiki/List_of_performance_analysis_tools
-
-## Guide to choose among general-purpose tools
-
-TBD. This section guides user which tool to use.
-
-## Linux Perf tool
+# Linux Perf (perf_events)
 
 Linux perf tool is a subsystem of Linux kernel and also has a front-end tool for user space. Summary of perf quoted from [official perf wiki](https://perf.wiki.kernel.org/index.php/Main_Page):
 
@@ -29,5 +21,3 @@ Because `perf` uses the kernel facilities to tracing/profiling and not all event
 And other useful links, but better read the perf wiki above first:
 - [Unoffical page for low level by Vince Weaver](http://web.eece.maine.edu/~vweaver/projects/perf_events/)
 - [Brendan Gregg's perf examples](http://www.brendangregg.com/perf.html)
-
-## BPF

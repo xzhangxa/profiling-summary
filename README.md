@@ -1,5 +1,7 @@
 # A poor summary of profiling methods
 
+**!!!WIP!!!**
+
 This repo is a poor and incomplete summary and guide for profiling methods/tools and some background knowledge. It is for the purpose of personal collection only thus limited by my knowledge/skill and information collection ability. Also I am by no way able to learn and use all methods mentioned, as it's mainly a summary for later reference.
 
 It's written as notes first but later I guess it's a good idea to organize the summary as markdown files with git history, so here it goes.
@@ -16,9 +18,20 @@ TBD.
 
 ## General-purpose tools
 
-This page [General-purpose Tools](./general_purpose_tools.md) summaries some tracing/profiling tools. It's not a complete list, however it tries to be a quick start for choosing a tool to use.
+A list from Wikipedia: https://en.wikipedia.org/wiki/List_of_performance_analysis_tools. Many of them are proprietaries or out of date, but it's good to check it for your case.
+
+### Guide to choose among general-purpose tools
+
+TBD. This section guides user which tool to use.
 
 Before check which general-purpose tool to use, it's recommanded to read the [Background](#background) section first, especially the [Event Sources](./event_sources.md) page to know what tracing sources you can use. Because eventually the data are from them and any general-purpose tool depends on your setting to trace from some sources.
+
+### List of some powerful tools
+
+- [Linux perf (perf_events)](./perf.md)
+- BPF (bpftrace & BCC): TBD
+- Intel Vtune profiler, Intel Advisor: TBD
+- LTTng: TBD
 
 ## Single-purpose tools and procfs/sysfs files for quick check
 
