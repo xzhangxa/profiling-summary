@@ -14,6 +14,12 @@ These pages summary background tracing/profiling event sources. These sources ar
 
 TBD.
 
+## General-purpose tools
+
+This page [General-purpose Tools](./general_purpose_tools.md) summaries some tracing/profiling tools. It's not a complete list, however it tries to be a quick start for choosing a tool to use.
+
+Before check which general-purpose tool to use, it's recommanded to read the [Background](#background) section first, especially the [Event Sources](./event_sources.md) page to know what tracing sources you can use. Because eventually the data are from them and any general-purpose tool depends on your setting to trace from some sources.
+
 ## Single-purpose tools and procfs/sysfs files for quick check
 
 Many single-purpose cmdline tools are available for profiling/tracing. Also some simple virtual files of procfs/sysfs can be read directly. Here lists some of them by target categories.
@@ -34,7 +40,7 @@ Many single-purpose cmdline tools are available for profiling/tracing. Also some
 
 - `df`, `mount`, `du`, `strace`;
 - `lsof` for opened files;
-- `fatrace` using Linux `fanotify` API for trace file accesses (ppen/close/read/write/+/delete/</>).
+- `fatrace` using Linux `fanotify` API for trace file accesses (open/close/read/write/create/delete/move_from/move_to).
 
 ### Disk IO
 
@@ -47,9 +53,3 @@ Many single-purpose cmdline tools are available for profiling/tracing. Also some
 - `ss` for sockets;
 - `ip`, `lnstat`;
 - `tcpdump`.
-
-## General-purpose tools
-
-This page [General-purpose Tools](./general_purpose_tools.md) summaries some tracing/profiling tools. It's not a complete list, however it tries to be a quick start for choosing a tool to use.
-
-Before check which general-purpose tool to use, it's recommanded to read the [Background](#background) section first, especially the [Event Sources](./event_sources.md) page to know what tracing sources you can use. Because eventually the data are from them and any general-purpose tool depends on your setting to trace from some sources.
