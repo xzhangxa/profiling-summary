@@ -21,7 +21,7 @@ The events can be counted, and sampled.
 - The counting mode is simple, HW will record the events so later it could be read.
 - The sampling mode works as the user sets the sampling frequency or number of occurrences of the event, PMU interrupts the CPU as the sampling counter overflow.
 
-The events differ by architectures and can be disabled in VM guest. Normal user could use user space tools to use it indirectly. Also if need to check exact some of them, run `perf list` and see items marked like [Hardware cache event] or [Kernel PMU event] to know what your machine provides and `perf(1)` can use.
+The events differ by architectures and can be disabled in VM guest. Normal user could use user space tools to use it indirectly. Also if need to check exact some of them, run `perf list` and see items marked like [Hardware cache event] or [Kernel PMU event] to know what your machine provides and `perf` can use.
 
 # procfs/sysfs
 
@@ -31,7 +31,7 @@ There are too many of them so it's not possible to list here, and many are used 
 
 # Kprobe
 
-Dynamically trap and run a handler function on kernel code address. Two types: kprobe and kretprobe.
+Dynamically trap and run a handler function on kernel code address. Two types: kprobe and kretprobe (for function return).
 
 Detailed introduction in kernel doc of [kprobe](https://www.kernel.org/doc/html/latest/trace/kprobes.html).
 
@@ -43,8 +43,8 @@ When instruction flow hits this, kprobe handler is executed and then jump back. 
 
 ## How to use
 
-- Write your own module and use `register_kprobe()` function or family;
-- Ftrace sysfs interface in `/sys/kernel/debug/tracing` (kernel doc [kprobetrace](https://www.kernel.org/doc/html/latest/trace/kprobetrace.html));
+- Write your own module and use `register_kprobe` function or family;
+- Ftrace sysfs interface in */sys/kernel/debug/tracing* (kernel doc [kprobetrace](https://www.kernel.org/doc/html/latest/trace/kprobetrace.html));
 - `perf_event_open` syscall;
 - Or more conveniently, use one of the many front-end tools: perf, SystemTap, Ftrace tools, BPF tracer BCC and bpftrace.
 
@@ -65,6 +65,6 @@ Uprobe is file based, so it means for a function in a library file is traced, th
 
 ## How to use
 
-- Ftrace sysfs interface in `/sys/kernel/debug/tracing` (kernel doc [uprobetracer](https://www.kernel.org/doc/html/latest/trace/uprobetracer.html));
+- Ftrace sysfs interface in */sys/kernel/debug/tracing* (kernel doc [uprobetracer](https://www.kernel.org/doc/html/latest/trace/uprobetracer.html));
 - `perf_event_open` syscall;
 - More conveniently, use one of the many front-end tools: perf, BPF traces BCC and bpftrace.
