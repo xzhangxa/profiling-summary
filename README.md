@@ -29,7 +29,7 @@ Before check which general-purpose tool to use, it's recommanded to read the [Ba
 ### List of some powerful tools
 
 - Linux perf (perf_events): [brief summary](./perf.md)
-- BPF (bpftrace & BCC): TBD
+- BPF (bpftrace & BCC): [brief summary](./bpf.md)
 - Intel Vtune profiler, Intel Advisor: TBD
 - LTTng: TBD
 

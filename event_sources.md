@@ -2,12 +2,13 @@
 
 | Source | SW/HW | Dynamic/static | Kernel/user | Front-end |
 | --- | --- | --- | --- | --- |
-| PMU [^1] | HW | static | | |
+| PMU [^1] | HW | static | | perf bpftrace BCC |
+| Kernel SW events | kernel source | static | kernel | perf bpftrace BCC |
 | procfs/sysfs | kernel source | static | kernel/user | |
-| kprobe | kernel source | dynamic | kernel | |
-| uprobe | kernel source | dynamic | user | |
-| tracepoints | kernel source | static | kernel | |
-| USDT [^2] | kernel source | static | user | |
+| kprobe | kernel source | dynamic | kernel | perf bpftrace BCC ftrace |
+| uprobe | kernel source | dynamic | user | perf bpftrace BCC ftrace |
+| tracepoint | kernel source | static | kernel | perf bpftrace BCC ftrace |
+| USDT [^2] | kernel source | static | user | bpftrace BCC |
 
 [^1]: Performance Monitoring Unit in CPU HW, or called PMC (Performance Monitoring Counters).
 
@@ -46,7 +47,7 @@ When instruction flow hits this, kprobe handler is executed and then jump back. 
 - Write your own module and use `register_kprobe` function or family;
 - Ftrace sysfs interface in */sys/kernel/debug/tracing* (kernel doc [kprobetrace](https://www.kernel.org/doc/html/latest/trace/kprobetrace.html));
 - `perf_event_open` syscall;
-- Or more conveniently, use one of the many front-end tools: perf, SystemTap, Ftrace tools, BPF tracer BCC and bpftrace.
+- Or more conveniently, use one of the many front-end tools: perf, SystemTap, Ftrace tools (perf-tools, trace-cmd), BPF tracer (BCC, bpftrace).
 
 ## Limitations
 
@@ -57,14 +58,43 @@ When instruction flow hits this, kprobe handler is executed and then jump back. 
 
 # Uprobe
 
+Similar Linux kernel feature like kprobe, but for dynamically trap and run a handler function on user code address, the user can instrument on ELF file of executable or shared library. Two types: uprobe and uretprobe (for function return).
+
 ## How it works
 
-Similar as kprobe, but for user space ELF files. A fast breakpoint inserted to the target instruction then execute uprobe handler.
-
-Uprobe is file based, so it means for a function in a library file is traced, the system-wide processes are traced.
+A fast breakpoint inserted to the target instruction then execute uprobe handler. Uprobe is file based, so it means for a function in a library file is traced, the system-wide processes are traced.
 
 ## How to use
 
 - Ftrace sysfs interface in */sys/kernel/debug/tracing* (kernel doc [uprobetracer](https://www.kernel.org/doc/html/latest/trace/uprobetracer.html));
 - `perf_event_open` syscall;
-- More conveniently, use one of the many front-end tools: perf, BPF traces BCC and bpftrace.
+- More conveniently, use one of the many front-end tools: perf, Ftrace tools (perf-tools, trace-cmd), BPF tracer (BCC, bpftrace).
+
+# Tracepoint
+
+Linux tracepoint is in-kernel static instrumentation point, the kernel source includes tracepoints in key places that could be used for tracing. Because they are coded into the fixed place of kernel source code, they are stable and always there to use for a given kernel version. All syscalls have its tracepoint and many subsystems define their own tracepoints in their key functions. For example Linux 5.9 has 1899 tracepoints according to `bpftrace -l`.
+
+## How it works
+
+Developer needs to define the tracepoint in kernel code with provided API `TRACE_EVENT` first. A nop instruction is inserted to where the tracepoint defines and a handler is generated, which later can iterate the array of registered tracepoint probe callbacks.
+
+At runtime, when the tracepoint is not used it's just a nop instruction. When tracepoint is enabled the nop will be replaced by a jmp instruction to the handler, and the probe callback is added to the array. Multiple probe callbacks can be registered to the same tracepoint. When all probes are disabled it could be reverted back to nop.
+
+## How to use
+
+- Ftrace sysfs interface in */sys/kernel/debug/tracing/events* (kernel doc [tracepoint-analysis](https://www.kernel.org/doc/html/latest/trace/tracepoint-analysis.html));
+- `perf_event_open` syscall;
+- One of the many front-end tools: perf, Ftrace tools (perf-tools, trace-cmd), BPF tracer (BCC, bpftrace).
+
+# USDT
+
+USDT (User-level Statically Defined Tracking) is derived from Dtrace (from Solaris), it's like tracepoints for user space. USDT can be coded into user space executables and libraries to make it for probing later by an external tracer. A few softwares can be compiled with USDT enabled.
+
+## How it works
+
+The idea is similar to tracepoint in kernel space, adding nop instruction in binary and replacing to probe enabled callbacks at runtime. To define USDT tracepoints in the code, systemtap-sdt-dev or Folly C++ library can be used.
+
+## How to use
+
+- BPF tracer (BCC, bpftrace);
+- Systemtap.
