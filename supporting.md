@@ -4,8 +4,8 @@ This page summaries some background information related to compiler support, deb
 
 Contents
 - [Stack Trace](#stack-trace)
-- [gprof Tracing Information](#gprof-tracing-information)
 - [Symbol Information](#symbol-information)
+- [gprof Tracing Information](#gprof-tracing-information)
 - [Ptrace syscall](#ptrace-syscall)
 
 ## Stack Trace
@@ -40,26 +40,27 @@ Intel CPU feature to record branches in hardware buffer, no runtime overhead but
 
 Intel CPU has a new HW extension for capturing software execution since Broadwell. It saves information into data packets for later software analysis. So it's possible to reconstruct stack info from branch info.
 
-## gprof Tracing Information
-
-GCC option `-pg` will generate extra code for gprof profiling tool, it will insert `mcount` function call into program to gather metrics.
-
-BTW, in kernel space Ftrace will use `mcount` for function tracer.
-
 ## Symbol Information
 
 Symbols are the readable strings for functions, global variables etc.. When debugging/profiling they are needed to make the stack info readable, otherwise we get only ??/kallsyms/unknown etc. so not helpful at all.
 
 ### User space
 
-Sometimes ELF files are built with symbol information removed, like using `strip(1)` to reduce size. So do not strip ELF files if you need call stack function names when debugging.
+Symbols information are available if the symbol table sections (symtab and dynsym) in ELF file are available. The section symtab contains all the symbols, while section dynsym contains only global dynamic symbols for linking.
 
-Or symbols can be available in debuginfo (gcc `-g` option) or BTF (BPF Type Format, new and not ready?).
+Sometimes pre-built files are released with symtab removed, like using `strip` to reduce size, then if it's a shared library, only exported symbols can be found; if it's executable, no symbol can be found by uprobe. So do not strip ELF files if you need call stack function names when debugging.
+
+Symbols can be retrieved in separate debuginfo files or BTF (BPF Type Format, new and not ready?). Linux distributions normally release the debuginfo files starting with the same name as original package, like on Debian for libc6 there's a libc6-dbg package.
 
 ### Kernel symbol with `perf`
 
 For kernel symbol information to be used by `perf`, It should be provided by kernel via */proc/kallsyms*, but it's normally disabled. Run `echo 0 > /proc/sys/kernel/kptr_restrict` to enable it.
 
+## gprof Tracing Information
+
+GCC option `-pg` will generate extra code for gprof profiling tool, it will insert `mcount` function call into program to gather metrics.
+
+BTW, in kernel space Ftrace will use `mcount` for function tracer.
 
 ## Ptrace Syscall
 
