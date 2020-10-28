@@ -42,7 +42,7 @@ Intel CPU has a new HW extension for capturing software execution since Broadwel
 
 ## Symbol Information
 
-Symbols are the readable strings for functions, global variables etc.. When debugging/profiling they are needed to make the stack info readable, otherwise we get only ??/kallsyms/unknown etc. so not helpful at all.
+Symbols are the readable strings for functions, global variables etc.. When debugging/profiling they are needed to make the stack info readable, otherwise we get only "??/kallsyms/unknown" etc. so not helpful at all.
 
 ### User space
 
@@ -50,11 +50,11 @@ Symbols information are available if the symbol table sections (symtab and dynsy
 
 Sometimes pre-built files are released with symtab removed, like using `strip` to reduce size, then if it's a shared library, only exported symbols can be found; if it's executable, no symbol can be found by uprobe. So do not strip ELF files if you need call stack function names when debugging.
 
-Symbols can be retrieved in separate debuginfo files or BTF (BPF Type Format, new and not ready?). Linux distributions normally release the debuginfo files starting with the same name as original package, like on Debian for libc6 there's a libc6-dbg package.
+Symbols can be retrieved in separate debuginfo files or BTF (BPF Type Format, new and not ready?). Linux distributions normally release the debuginfo files packages with the suffix -dbg/-debuginfo after original package names, like on Debian for libc6 there's a libc6-dbg package.
 
-### Kernel symbol with `perf`
+### Kernel symbols
 
-For kernel symbol information to be used by `perf`, It should be provided by kernel via */proc/kallsyms*, but it's normally disabled. Run `echo 0 > /proc/sys/kernel/kptr_restrict` to enable it.
+For kernel symbol information to be used by `perf`, It should be provided by kernel via */proc/kallsyms*, but it's sometimes disabled. Run `echo 0 > /proc/sys/kernel/kptr_restrict` to enable it. */proc/kallsyms* is dynamic so loaded modules' symbols are also available.
 
 ## gprof Tracing Information
 
