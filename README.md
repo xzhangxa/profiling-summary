@@ -87,6 +87,7 @@ Many single-purpose cmdline tools are available for profiling/tracing. Also some
 ### Memory
 
 - */proc/iomem*, */proc/ioports*, */proc/meminfo*, */proc/zoneinfo*;
+- */proc/\<PID\>/smaps* for per-process detailed memory information, maybe too much, but it reveals very internal details;
 - `vmstat`, `free`, also `top/htop` for per-process information;
 - `slabtop`, data from */proc/slabinfo*.
 
