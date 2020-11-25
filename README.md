@@ -46,7 +46,7 @@ Just to name a few:
 - LTTng
 - Systemtap
 - valgrind
-- Intel advisor, Vtune, inspector
+- Intel Vtune, advisor, inspector
 - and more...
  
 In following sections some tools are summarized in two categories [General-purpose tools](#general-purpose-tools) and [Single-purpose tools](#single-purpose-tools-and-procfssysfs-files-for-quick-check). Please check each section for more.
@@ -63,16 +63,36 @@ A list from Wikipedia: https://en.wikipedia.org/wiki/List_of_performance_analysi
 
 ### Guide to choose among general-purpose tools
 
-TBD. This section guides user which tool to use.
-
 Before check which general-purpose tool to use, it's recommended to read the [Background](#background) section first, especially the [Event Sources](./event_sources.md) page to know what tracing sources you can use. Because eventually the data are from them and any general-purpose tool depends on your setting to trace from some sources.
 
-### List of some powerful tools
+Generially it's straight-forward if the user knows which subset is the target, the user could jump directly to a single purpose tool to check the process or the whole system. When more details of the target process, usage of something across multiple processes or the whole system are needed, it's better to check some powerful tools below. The choice is highly dependent on the aims, so here just lists a few recommendations for the choosing. Anyway, the user knows the aim better so could ignore the recommendations.
 
-- Linux perf (perf_events): [brief summary](./perf.md)
-- BPF (bpftrace & BCC): [brief summary](./bpf.md)
-- Intel Vtune profiler, Intel Advisor: TBD
-- LTTng: TBD
+### Linux perf (perf_events): [brief summary](./perf.md)
+
+The Linux perf is normally quickest to use:
+- The kernel features supporting it are most likely enabled for kernel images of Linux distributions and dev boards;
+- Only kernel and user space perf tool is needed, the distributions or board SDK should already provided it, no need for some third-party tools/libraries;
+- It could use almost all in-kernel event resources and components to gather information, as listed in [Event Sources](./event_sources.md) section;
+- It's available across arch.
+
+Also some disadvantages:
+- To trace/profiling some subset of information of process or subsystem of the Linux kernel, the user needs to know about what event sources to use: what tracepoints are avaiable, where to add the kprobe/uprobe etc. Otherwise only CPU sampling is straight-forward;
+- Cannot be used programmatically, not that flexible.
+
+#### BPF (bpftrace & BCC): [brief summary](./bpf.md)
+
+#### Intel Vtune profiler, Advisor, Inspector: [brief summary](./intel.md)
+
+Intel Vtune/Advisor/Insepctor is powerful if the target is x86 user space profiling and Intel HW (CPU/GPU/FPGA):
+- Easy to use, almost no need to know how it works in background;
+- GUI is available, nice result graphs;
+- Special support for vectorlization and threading;
+- Not only profiling, but also advise/recommend what to do;
+- Special support for Intel HW, GPU offload, experimental FPGA support etc.
+
+Disadvantages:
+- x86 only, Intel HW only, for example Vtune/Advisor GPU offload profiling's GPU actually means Intel GPU, not suitable for GPUs from other vendors;
+- Mainly for user space process, may not be useful for in-kernel profiling.
 
 ## Single-purpose tools and procfs/sysfs files for quick check
 
