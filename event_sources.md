@@ -9,6 +9,10 @@
 | uprobe | kernel source | dynamic | user | perf bpftrace BCC ftrace |
 | tracepoint | kernel source | static | kernel | perf bpftrace BCC ftrace |
 | USDT [^2] | kernel source | static | user | bpftrace BCC |
+| gprof | compiler | static | user | gprof |
+| Valgrind | user space | dynamic | user | valgrind tools |
+| Intel VTune ITT | user space | static | user | Intel VTune |
+| Intel Pin | user space | dynamic | user | Pintools |
 
 [^1]: Performance Monitoring Unit in CPU HW, or called PMC (Performance Monitoring Counters).
 
@@ -98,3 +102,33 @@ The idea is similar to tracepoint in kernel space, adding nop instruction in bin
 
 - BPF tracer (BCC, bpftrace);
 - Systemtap.
+
+# Intel VTune ITT
+
+Intel VTune profiler has a set of ITT APIs to link into your program and could get information from them to help profiling. It's a static user space instrumentation method.
+
+> The instrumentation and tracing technology (ITT) APIs provided by the Intel® VTune™ Profiler enable your application to generate and control the collection of trace data during its execution. [link](https://software.intel.com/content/www/us/en/develop/documentation/vtune-help/top/api-support/instrumentation-and-tracing-technology-apis.html)
+
+ITT APIs provide domain, string handle, tasks etc functions to integrated into the program. The program needs to link and compile with the ITT library. Then VTume could trace the user defined events.
+
+ITT also has Android version for ARM, so it's possible to use ITT in ARM program and analyize on x86 VTune.
+
+## How it works
+
+Close source, the official documentation mainly is about the usage.
+
+## Limitations
+
+- Close source, for use with VTune only.
+
+## How to use
+
+Developer needs to use ITT APIs and link ITT library to work with VTune.
+
+# Intel Pin
+
+> Pin is a dynamic binary instrumentation framework for the IA-32, x86-64 and MIC instruction-set architectures that enables the creation of dynamic program analysis tools. Some tools built with Pin are Intel® VTune™ Amplifier, Intel® Inspector, Intel® Advisor and Intel® Software Development Emulator (Intel® SDE). The tools created using Pin, called Pintools, can be used to perform program analysis on user space applications on Linux*, Windows* and macOS*. As a dynamic binary instrumentation tool, instrumentation is performed at run time on the compiled binary files. Thus, it requires no recompiling of source code and can support instrumenting programs that dynamically generate code. [link](https://software.intel.com/content/www/us/en/develop/articles/pin-a-dynamic-binary-instrumentation-tool.html)
+
+## How it works
+
+TODO

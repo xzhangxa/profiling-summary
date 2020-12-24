@@ -58,7 +58,7 @@ For kernel symbol information to be used by `perf`, It should be provided by ker
 
 ## gprof Tracing Information
 
-GCC option `-pg` will generate extra code for gprof profiling tool, it will insert `mcount` function call into program to gather metrics.
+GCC option `-pg` will generate extra code for gprof profiling tool, it will insert `mcount` function call into program to gather metrics. Using `gprof`, executable will dump gprof data file after exiting, including call-graph, function call counts, function run time etc.
 
 BTW, in kernel space Ftrace will use `mcount` for function tracer.
 

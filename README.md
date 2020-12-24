@@ -51,11 +51,11 @@ Just to name a few:
  
 In following sections some tools are summarized in two categories [General-purpose tools](#general-purpose-tools) and [Single-purpose tools](#single-purpose-tools-and-procfssysfs-files-for-quick-check). Please check each section for more.
 
-### A flowchart for choosing the right tool (or method) to profiling/tracing
+### A flowchart for choosing the right tool to profiling/tracing
 
-To be updated, currently it's hand-drawn first version, it's not very good.
+This is just personal opinion, someone else may conclude a much different flowchart. The Intel tools are included so at least parts of flowchart are x86 only.
 
-![The flowchart for profiling/tracing](./flowchart.jpg)
+![The flowchart for profiling/tracing](./flowchart.png)
 
 ## General-purpose tools
 
@@ -102,6 +102,8 @@ Many single-purpose cmdline tools are available for profiling/tracing. Also some
 
 - `uptime`, loadavg from */proc/loadavg*;
 - `top`, `htop`;
+- `strace`, `ltrace`;
+- everything under */proc/\<PID\>/*;
 - `mpstat` for CPU time in different states, `pidstat` similar to `top` and can run in rolling mode. Both from [sysstat](https://github.com/sysstat/sysstat).
 
 ### Memory
@@ -114,8 +116,7 @@ Many single-purpose cmdline tools are available for profiling/tracing. Also some
 
 ### Filesystem
 
-- `df`, `mount`, `du`, `strace`;
-- `lsof` for opened files;
+- `lsof`, `strace` for opened files;
 - `fatrace` using Linux `fanotify` API for trace file accesses (open/close/read/write/create/delete/move_from/move_to).
 
 ### Disk IO
