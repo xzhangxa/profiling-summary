@@ -1,8 +1,8 @@
-# A poor summary of profiling methods
+# An incomplete summary of profiling methods on Linux
 
 **!!!WIP!!!**
 
-This repo is a poor and incomplete summary and guide for profiling methods/tools and some background knowledge. It is for the purpose of personal collection only thus limited by my knowledge/skill and information collection ability. Also I am by no way able to learn and use all methods mentioned, as it's mainly a summary for later reference.
+This repo is an incomplete summary and guide for Linux profiling methods/tools and some background knowledge. It is for the purpose of personal collection only thus limited by my knowledge/skill and information collection ability. Also I am by no way able to learn and use all methods mentioned, as it's mainly a summary for later reference.
 
 It's written as notes first but later I guess it's a good idea to organize the summary as markdown files with git history, so here it goes.
 
@@ -47,6 +47,7 @@ Just to name a few:
 - Systemtap
 - valgrind
 - Intel Vtune, advisor, inspector
+- Intel Pin
 - and more...
  
 In following sections some tools are summarized in two categories [General-purpose tools](#general-purpose-tools) and [Single-purpose tools](#single-purpose-tools-and-procfssysfs-files-for-quick-check). Please check each section for more.
@@ -72,27 +73,43 @@ Generially it's straight-forward if the user knows which subset is the target, t
 The Linux perf is normally quickest to use:
 - The kernel features supporting it are most likely enabled for kernel images of Linux distributions and dev boards;
 - Only kernel and user space perf tool is needed, the distributions or board SDK should already provided it, no need for some third-party tools/libraries;
-- It could use almost all in-kernel event resources and components to gather information, as listed in [Event Sources](./event_sources.md) section;
+- It could use (almost?) all in-kernel event resources and components to gather information, as listed in [Event Sources](./event_sources.md) section;
 - It's available across arch.
 
 Also some disadvantages:
 - To trace/profiling some subset of information of process or subsystem of the Linux kernel, the user needs to know about what event sources to use: what tracepoints are avaiable, where to add the kprobe/uprobe etc. Otherwise only CPU sampling is straight-forward;
-- Cannot be used programmatically, not that flexible.
+- Cannot be used programmatically, not that flexible;
+- Need post-processing.
 
 #### BPF (bpftrace & BCC): [brief summary](./bpf.md)
+
+Advantages:
+- bpftrace: easy to learn to use for simple analysis, good for one-liner and small scripts;
+- BCC: could be used for writing complex profiling tools;
+- bpftrace/BCC: based on BPF and the active community, great potential and a lot of tools available;
+- bpftrace/BCC: support (almost?) all in-kernel event resources and across arch.
+
+Disadvantages:
+- bpftrace/BCC compilation for now is not simple, depending on llvm and others, so may not easy to cross-compile for a dev board;
+- Need to learn the syntax (bpftrace) and API (BCC);
+- Features are growing with kernel versions, old versions may not support some features; Some BPF configs may not be enabled for pre-built kernels.
 
 #### Intel Vtune profiler, Advisor, Inspector: [brief summary](./intel.md)
 
 Intel Vtune/Advisor/Insepctor is powerful if the target is x86 user space profiling and Intel HW (CPU/GPU/FPGA):
 - Easy to use, almost no need to know how it works in background;
 - GUI is available, nice result graphs;
-- Special support for vectorlization and threading;
+- Special support for vectorization and threading;
 - Not only profiling, but also advise/recommend what to do;
 - Special support for Intel HW, GPU offload, experimental FPGA support etc.
 
 Disadvantages:
 - x86 only, Intel HW only, for example Vtune/Advisor GPU offload profiling's GPU actually means Intel GPU, not suitable for GPUs from other vendors;
 - Mainly for user space process, may not be useful for in-kernel profiling.
+
+#### Intel Pin
+
+TBD
 
 ## Single-purpose tools and procfs/sysfs files for quick check
 
